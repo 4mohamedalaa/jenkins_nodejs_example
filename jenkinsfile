@@ -1,0 +1,18 @@
+pipeline {
+    agent { label 'aws' } 
+    stages {
+        stage('Deployment ') {
+            steps {
+                sh 'sudo docker build . -t node-app'
+                sh 'sudo docker rm -f node-app'
+                 withCredentials([usernamePassword(credentialsId: 'terraform_mysql_env', usernameVariable: 'db_User', passwordVariable: 'db_Pass')]) {
+                        sh "sudo docker run -d --name node-app --env-file /home/ubuntu/.env -e RDS_USERNAME=${db_User} -e RDS_PASSWORD=${db_Pass} -p3000:3000  node-app"
+                    }
+           
+               
+            }
+
+            
+        }
+    }
+}
