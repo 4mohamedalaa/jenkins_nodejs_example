@@ -13,6 +13,7 @@ pipeline {
         stage('Build') {
             steps {
                 // Bulding Docker image
+                sh "docker rmi -f ${registry}/node-app "
                 sh "docker build . -t ${registry}/node-app"
 
 
